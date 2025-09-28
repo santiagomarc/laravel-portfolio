@@ -1,6 +1,10 @@
 <?php
 // filepath: app/Http/Controllers/AuthController.php
 
+/**
+ * AuthController - Handles user authentication
+ * Manages login/logout functionality with session-based authentication
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 class AuthController extends Controller
 {
     /**
-     * Show login form
+     * display login form
      */
     public function showLogin()
     {
