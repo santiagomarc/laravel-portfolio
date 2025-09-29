@@ -15,7 +15,7 @@ A professional portfolio website built with Laravel featuring user authenticatio
 
 - **Backend:** PHP, Laravel Framework
 - **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
-- **Database:** SQLite (configured for easy setup)
+- **Database:** PGsql
 - **Styling:** CSS Variables, Flexbox, Grid
 - **Authentication:** Laravel Sessions
 
