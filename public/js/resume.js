@@ -4,21 +4,26 @@ const modal = document.getElementById('project-modal');
 const modalBody = document.getElementById('modal-body');
 const closeBtn = document.querySelector('.close');
 
+// Hardcoded project details with images (fallback for specific projects)
 const projectDetails = {
-    1: `<h3>Laravel Portfolio with Authentication</h3>
-        <img src="images/p1.png" alt="Portfolio Project" class="modal-image">
-        <p>A professional portfolio website built with Laravel framework featuring user authentication, responsive design, and dynamic content management.</p>
-        <p><strong>Technologies:</strong> Laravel, PHP, PostgreSQL, Blade, CSS3</p>`,
-    2: `<h3>A Distance-Based Soft Weighting Mechanism for Noise-Handling of K-Means Algorithm</h3>
-        <img src="images/p2.png" alt="K-Means Research Project" class="modal-image">
-        <img src="images/p21.png" alt="K-Means Research Project" class="modal-image">
-        <p>Research project implementing a distance-based soft weighting mechanism for noise-handling in K-Means algorithm using Gaussian RBF weighted influence.</p>
-        <p><strong>Technologies:</strong> Python, NumPy, Scikit-learn, Matplotlib</p>`,
-    3: `<h3>Nutrition-based Food Ordering System</h3>
-        <img src="images/p3.png" alt="Food Ordering System" class="modal-image">
-        <img src="images/p31.png" alt="Food Ordering System" class="modal-image">
-        <p>Console application with GUI built using Java and MySQL, featuring nutritional information tracking and user-friendly ordering interface.</p>
-        <p><strong>Technologies:</strong> Java, MySQL, Swing, JDBC</p>`
+    1: {
+        title: 'Laravel Portfolio with Authentication',
+        images: ['images/p1.png'],
+        description: 'A professional portfolio website built with Laravel framework featuring user authentication, responsive design, and dynamic content management.',
+        technologies: 'Laravel, PHP, PostgreSQL, Blade, CSS3'
+    },
+    2: {
+        title: 'Enhanced K-Means Clustering Algorithm',
+        images: ['images/p2.png', 'images/p21.png'],
+        description: 'Research project implementing a distance-based soft weighting mechanism for noise-handling in K-Means algorithm using Gaussian RBF weighted influence.',
+        technologies: 'Python, NumPy, Scikit-learn, Matplotlib'
+    },
+    3: {
+        title: 'Nutrition-Based Food Ordering System',
+        images: ['images/p3.png', 'images/p31.png'],
+        description: 'Console application with GUI built using Java and MySQL, featuring nutritional information tracking and user-friendly ordering interface.',
+        technologies: 'Java, MySQL, Swing, JDBC'
+    }
 };
 
 // Project modal functionality
@@ -26,7 +31,27 @@ projectLinks.forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
         const id = this.getAttribute('data-project');
-        modalBody.innerHTML = projectDetails[id] || '<p>Project details coming soon...</p>';
+        const project = projectDetails[id];
+        
+        if (project) {
+            // Build modal content with images
+            let modalContent = `<h3>${project.title}</h3>`;
+            
+            // Add images if available
+            if (project.images && project.images.length > 0) {
+                project.images.forEach(img => {
+                    modalContent += `<img src="${img}" alt="${project.title}" class="modal-image">`;
+                });
+            }
+            
+            modalContent += `<p>${project.description}</p>`;
+            modalContent += `<p><strong>Technologies:</strong> ${project.technologies}</p>`;
+            
+            modalBody.innerHTML = modalContent;
+        } else {
+            modalBody.innerHTML = '<p>Project details coming soon...</p>';
+        }
+        
         modal.style.display = 'block';
     });
 });

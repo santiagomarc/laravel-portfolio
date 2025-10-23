@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -17,9 +19,9 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        // If already logged in, redirect to resume
+        // If already logged in, redirect to dashboard
         if (Session::get('logged_in')) {
-            return redirect()->route('resume');
+            return redirect()->route('dashboard');
         }
         
         return view('auth.login');
@@ -27,30 +29,37 @@ class AuthController extends Controller
 
     /**
      * Handle login authentication
+     * Now checks PostgreSQL database instead of hardcoded values
      */
     public function authenticate(Request $request)
     {
         // Validate input
         $request->validate([
-            'username' => 'required|string',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        $username = trim($request->username);
+        $email = trim($request->email);
         $password = trim($request->password);
 
-        // Simple credential check
-        if ($username === 'admin' && $password === '1234') {
-            // Set session
+        // Check database for user by email
+        $user = User::where('email', $email)->first();
+
+        // Verify user exists and password matches
+        if ($user && Hash::check($password, $user->password)) {
+            // Set session with user data
             Session::put('logged_in', true);
-            Session::put('username', $username);
+            Session::put('user_id', $user->id);
+            Session::put('username', $user->name);
+            Session::put('user_email', $user->email);
             
-            return redirect()->route('resume')->with('success', 'Login successful!');
+            return redirect()->route('dashboard')
+                ->with('success', 'Welcome back, ' . $user->name . '!');
         }
 
         return back()->withErrors([
-            'credentials' => 'Invalid username or password.'
-        ])->withInput();
+            'email' => 'Invalid email or password.'
+        ])->withInput($request->only('email'));
     }
 
     /**

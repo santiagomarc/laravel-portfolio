@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Profile;
+use App\Models\Experience;
+use App\Models\Education;
+use App\Models\Project;
+use App\Models\Skill;
 
 class ResumeController extends Controller
 {
@@ -197,5 +204,106 @@ class ResumeController extends Controller
         $logEntry = json_encode($data) . "\n";
         $logFile = storage_path('app/contact_messages.log');
         file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
+    }
+
+    // ===== NEW METHODS FOR ACTIVITY 3 =====
+
+    /**
+     * Display dashboard (resume view with edit button)
+     * Route: /dashboard (protected)
+     */
+    public function dashboard()
+    {
+        // Get the logged-in user from database (assuming first user is admin)
+        $user = User::first(); // or User::where('name', Session::get('username'))->first();
+        
+        // Get or create profile if it doesn't exist
+        $profile = $user->profile ?? Profile::create([
+            'user_id' => $user->id,
+            'full_name' => $user->name,
+        ]);
+        
+        $experiences = $user->experiences()->orderBy('start_date', 'desc')->get();
+        $education = $user->education()->orderBy('start_date', 'desc')->get();
+        $projects = $user->projects()->orderBy('start_date', 'desc')->get();
+        $skills = $user->skills()->get();
+        
+        return view('resume.dashboard', compact('user', 'profile', 'experiences', 'education', 'projects', 'skills'));
+    }
+
+    /**
+     * Show edit form for resume
+     * Route: /profile/edit (protected)
+     */
+    public function edit()
+    {
+        // Get the logged-in user from database
+        $user = User::first();
+        
+        // Get or create profile if it doesn't exist
+        $profile = $user->profile ?? Profile::create([
+            'user_id' => $user->id,
+            'full_name' => $user->name,
+        ]);
+        
+        $experiences = $user->experiences()->orderBy('start_date', 'desc')->get();
+        $education = $user->education()->orderBy('start_date', 'desc')->get();
+        $projects = $user->projects()->orderBy('start_date', 'desc')->get();
+        $skills = $user->skills()->get();
+        
+        return view('resume.edit', compact('user', 'profile', 'experiences', 'education', 'projects', 'skills'));
+    }
+
+    /**
+     * Update resume data in database
+     * Route: POST /profile/update (protected)
+     */
+    public function update(Request $request)
+    {
+        // Get the logged-in user from database
+        $user = User::first();
+        
+        // Validate input
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'location' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'linkedin' => 'nullable|url|max:255',
+            'github' => 'nullable|url|max:255',
+            'bio' => 'nullable|string|max:1000',
+        ]);
+
+        // Update or create profile
+        $user->profile()->updateOrCreate(
+            ['user_id' => $user->id],
+            $validated
+        );
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Resume updated successfully!');
+    }
+
+    /**
+     * Display public resume view (no login required)
+     * Route: GET /resume/{id}
+     */
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        
+        // Get profile or create a basic one
+        $profile = $user->profile ?? Profile::create([
+            'user_id' => $user->id,
+            'full_name' => $user->name,
+        ]);
+        
+        $experiences = $user->experiences()->orderBy('start_date', 'desc')->get();
+        $education = $user->education()->orderBy('start_date', 'desc')->get();
+        $projects = $user->projects()->orderBy('start_date', 'desc')->get();
+        $skills = $user->skills()->get();
+        
+        return view('resume.public', compact('user', 'profile', 'experiences', 'education', 'projects', 'skills'));
     }
 }

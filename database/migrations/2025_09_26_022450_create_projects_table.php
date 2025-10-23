@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('technologies')->nullable();
+            $table->string('url')->nullable();
+            $table->string('github_url')->nullable();
+            $table->string('image')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->timestamps();
         });
     }

@@ -30,7 +30,7 @@
         
         <form method="POST" action="{{ route('authenticate') }}">
             @csrf
-            <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required>
+            <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
@@ -40,12 +40,12 @@
     <script>
         // Form validation
         document.querySelector('form').addEventListener('submit', function(e) {
-            const username = document.querySelector('input[name="username"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
             const password = document.querySelector('input[name="password"]').value.trim();
             
-            if (username.length < 3) {
+            if (!email.includes('@')) {
                 e.preventDefault();
-                alert('Username must be at least 3 characters long.');
+                alert('Please enter a valid email address.');
                 return;
             }
             
@@ -56,8 +56,8 @@
             }
         });
 
-        // Auto-focus on username field
-        document.querySelector('input[name="username"]').focus();
+        // Auto-focus on email field
+        document.querySelector('input[name="email"]').focus();
     </script>
 </body>
 </html>
