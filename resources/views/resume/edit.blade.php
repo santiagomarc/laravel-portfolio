@@ -239,6 +239,164 @@
             </div>
         </div>
 
+        <!-- Skills Section -->
+        <div class="form-section">
+            <h2>💡 Technical Skills</h2>
+            <p style="color: #7f8c8d; font-size: 14px; margin-bottom: 20px;">Manage your skills across four categories</p>
+            
+            @php
+                $categories = [
+                    'Frontend Development',
+                    'Backend Development',
+                    'Tools & Technologies',
+                    'Programming Languages'
+                ];
+                $groupedSkills = $skills->groupBy('category');
+            @endphp
+
+            @foreach($categories as $category)
+                <div class="skill-category-section" style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">{{ $category }}</h3>
+                    
+                    <div class="skills-list" id="skills-{{ Str::slug($category) }}">
+                        @if(isset($groupedSkills[$category]))
+                            @foreach($groupedSkills[$category] as $skill)
+                                <div class="skill-item" data-skill-id="{{ $skill->id }}" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: white; margin-bottom: 10px; border-radius: 5px;">
+                                    <div class="skill-display">
+                                        <span class="skill-name" style="font-weight: 500;">{{ $skill->name }}</span>
+                                        <span style="color: #7f8c8d; margin-left: 10px;">{{ $skill->proficiency_level }}%</span>
+                                    </div>
+                                    <div class="skill-actions">
+                                        <button type="button" class="btn-edit-skill" onclick="editSkill({{ $skill->id }})" style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Edit</button>
+                                        <button type="button" class="btn-delete-skill" onclick="deleteSkill({{ $skill->id }}, '{{ $skill->name }}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">×</button>
+                                    </div>
+                                    <div class="skill-edit-form" style="display: none;">
+                                        <input type="text" class="edit-skill-name" value="{{ $skill->name }}" style="padding: 5px; margin-right: 10px; width: 200px;">
+                                        <input type="number" class="edit-skill-level" value="{{ $skill->proficiency_level }}" min="0" max="100" style="padding: 5px; margin-right: 10px; width: 80px;">
+                                        <button type="button" onclick="saveSkill({{ $skill->id }})" style="background: #27ae60; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Save</button>
+                                        <button type="button" onclick="cancelEdit({{ $skill->id }})" style="background: #95a5a6; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Cancel</button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+
+                    <!-- Add New Skill Form -->
+                    <div class="add-skill-section" style="margin-top: 15px;">
+                        <button type="button" class="btn-add-skill" onclick="showAddForm('{{ $category }}')" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">+ Add {{ $category }} Skill</button>
+                        
+                        <div class="add-skill-form" id="add-form-{{ Str::slug($category) }}" style="display: none; margin-top: 10px; padding: 15px; background: white; border-radius: 5px;">
+                            <input type="text" class="new-skill-name" placeholder="Skill name" style="padding: 8px; margin-right: 10px; width: 200px;">
+                            <input type="number" class="new-skill-level" placeholder="Level (0-100)" min="0" max="100" value="75" style="padding: 8px; margin-right: 10px; width: 100px;">
+                            <button type="button" onclick="addSkill('{{ $category }}')" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Add</button>
+                            <button type="button" onclick="cancelAdd('{{ $category }}')" style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Work Experience Section -->
+        <div class="form-section">
+            <h2>💼 Work Experience</h2>
+            <p style="color: #7f8c8d; font-size: 14px; margin-bottom: 20px;">Manage your work history</p>
+            
+            @foreach($experiences as $exp)
+                <div class="experience-item" data-exp-id="{{ $exp->id }}" style="margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <!-- Display Mode -->
+                    <div class="exp-display">
+                        <h3 style="color: #2c3e50; margin: 0 0 10px 0; font-size: 18px;">{{ $exp->job_title }}</h3>
+                        <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 14px;">{{ $exp->company_details }}</p>
+                        <p style="color: #2c3e50; margin: 0; white-space: pre-line;">{{ $exp->description }}</p>
+                        <div style="margin-top: 15px;">
+                            <button type="button" onclick="editExperience({{ $exp->id }})" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Edit</button>
+                            <button type="button" onclick="deleteExperience({{ $exp->id }}, '{{ $exp->job_title }}')" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer;">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Edit Mode (hidden) -->
+                    <div class="exp-edit-form" style="display: none;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Job Title</label>
+                            <input type="text" class="edit-exp-title" value="{{ $exp->job_title }}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Company & Details</label>
+                            <input type="text" class="edit-exp-company" value="{{ $exp->company_details }}" placeholder="e.g., TechCorp Solutions | Remote | Jan 2023 - Present" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Description</label>
+                            <textarea class="edit-exp-description" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">{{ $exp->description }}</textarea>
+                        </div>
+                        <button type="button" onclick="saveExperience({{ $exp->id }})" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Save</button>
+                        <button type="button" onclick="cancelEditExperience({{ $exp->id }})" style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer;">Cancel</button>
+                    </div>
+                </div>
+            @endforeach
+            
+            <!-- Add New Experience -->
+            <div style="margin-top: 20px;">
+                <button type="button" onclick="showAddExperienceForm()" style="background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Add Work Experience</button>
+                
+                <div id="add-experience-form" style="display: none; margin-top: 15px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h3 style="margin-top: 0;">Add New Experience</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Job Title</label>
+                        <input type="text" id="new-exp-title" placeholder="e.g., Full Stack Developer" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Company & Details</label>
+                        <input type="text" id="new-exp-company" placeholder="e.g., TechCorp Solutions | Remote | Jan 2023 - Present" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Description</label>
+                        <textarea id="new-exp-description" rows="4" placeholder="Describe your responsibilities and achievements..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;"></textarea>
+                    </div>
+                    <button type="button" onclick="addExperience()" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Add</button>
+                    <button type="button" onclick="cancelAddExperience()" style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer;">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="form-section">
+            <h2>🎓 Education</h2>
+            <p style="color: #7f8c8d; font-size: 14px; margin-bottom: 20px;">Edit your education history (2 entries: College & High School)</p>
+            
+            @foreach($education as $edu)
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #3498db;" data-edu-id="{{ $edu->id }}">
+                
+                <!-- Display Mode -->
+                <div class="edu-display">
+                    <h3 style="color: #2c3e50; margin: 0 0 10px 0; font-size: 18px;">{{ $edu->degree }}</h3>
+                    <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 14px;">{{ $edu->school_details }}</p>
+                    <p style="color: #2c3e50; margin: 0; white-space: pre-line;">{{ $edu->description }}</p>
+                    <div style="margin-top: 15px;">
+                        <button type="button" onclick="editEducation({{ $edu->id }})" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer;">Edit</button>
+                    </div>
+                </div>
+                
+                <!-- Edit Mode (hidden) -->
+                <div class="edu-edit-form" style="display: none;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Degree / Level</label>
+                        <input type="text" class="edit-edu-degree" value="{{ $edu->degree }}" placeholder="e.g., Bachelor of Science in Computer Science" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">School & Details</label>
+                        <input type="text" class="edit-edu-details" value="{{ $edu->school_details }}" placeholder="e.g., Batangas State University | Batangas | 2023 - Present" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Description</label>
+                        <textarea class="edit-edu-description" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" placeholder="e.g., Relevant Coursework: ...">{{ $edu->description }}</textarea>
+                    </div>
+                    <button type="button" onclick="saveEducation({{ $edu->id }})" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Save</button>
+                    <button type="button" onclick="cancelEditEducation({{ $edu->id }})" style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer;">Cancel</button>
+                </div>
+                
+            </div>
+            @endforeach
+        </div>
 
         <!-- Form Actions -->
         <div class="form-actions">
@@ -255,13 +413,143 @@
 
 @section('scripts')
 <script>
-    // Auto-save draft (optional enhancement)
-    document.querySelectorAll('input, textarea').forEach(element => {
-        element.addEventListener('blur', function() {
-            // Could implement auto-save to localStorage here
-            console.log('Field updated:', this.name);
+    // CSRF Token for AJAX requests
+    const csrfToken = '{{ csrf_token() }}';
+
+    // Show add skill form
+    function showAddForm(category) {
+        const slug = category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '');
+        document.getElementById('add-form-' + slug).style.display = 'block';
+    }
+
+    // Cancel add skill
+    function cancelAdd(category) {
+        const slug = category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '');
+        const form = document.getElementById('add-form-' + slug);
+        form.style.display = 'none';
+        form.querySelector('.new-skill-name').value = '';
+        form.querySelector('.new-skill-level').value = '75';
+    }
+
+    // Add new skill
+    function addSkill(category) {
+        const slug = category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '');
+        const form = document.getElementById('add-form-' + slug);
+        const name = form.querySelector('.new-skill-name').value.trim();
+        const level = form.querySelector('.new-skill-level').value;
+
+        if (!name) {
+            alert('Please enter a skill name');
+            return;
+        }
+
+        // Send AJAX request to add skill
+        fetch('{{ route("skills.store") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                name: name,
+                category: category,
+                proficiency_level: level
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload to show new skill
+            } else {
+                alert('Error adding skill: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error adding skill');
         });
-    });
+    }
+
+    // Edit skill (show form)
+    function editSkill(skillId) {
+        const item = document.querySelector(`[data-skill-id="${skillId}"]`);
+        item.querySelector('.skill-display').style.display = 'none';
+        item.querySelector('.skill-actions').style.display = 'none';
+        item.querySelector('.skill-edit-form').style.display = 'block';
+    }
+
+    // Cancel edit
+    function cancelEdit(skillId) {
+        const item = document.querySelector(`[data-skill-id="${skillId}"]`);
+        item.querySelector('.skill-display').style.display = 'block';
+        item.querySelector('.skill-actions').style.display = 'block';
+        item.querySelector('.skill-edit-form').style.display = 'none';
+    }
+
+    // Save skill
+    function saveSkill(skillId) {
+        const item = document.querySelector(`[data-skill-id="${skillId}"]`);
+        const name = item.querySelector('.edit-skill-name').value.trim();
+        const level = item.querySelector('.edit-skill-level').value;
+
+        if (!name) {
+            alert('Please enter a skill name');
+            return;
+        }
+
+        // Send AJAX request to update skill
+        fetch(`/skills/${skillId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                name: name,
+                proficiency_level: level
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload to show updated skill
+            } else {
+                alert('Error updating skill: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating skill');
+        });
+    }
+
+    // Delete skill
+    function deleteSkill(skillId, skillName) {
+        if (!confirm(`Are you sure you want to delete "${skillName}"?`)) {
+            return;
+        }
+
+        // Send AJAX request to delete skill
+        fetch(`/skills/${skillId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload to remove deleted skill
+            } else {
+                alert('Error deleting skill: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting skill');
+        });
+    }
 
     // Confirm before leaving if form has changes
     let formChanged = false;
@@ -282,5 +570,180 @@
     document.querySelector('form').addEventListener('submit', function() {
         formChanged = false;
     });
+
+    // ===== WORK EXPERIENCE FUNCTIONS =====
+    
+    function showAddExperienceForm() {
+        document.getElementById('add-experience-form').style.display = 'block';
+    }
+
+    function cancelAddExperience() {
+        document.getElementById('add-experience-form').style.display = 'none';
+        document.getElementById('new-exp-title').value = '';
+        document.getElementById('new-exp-company').value = '';
+        document.getElementById('new-exp-description').value = '';
+    }
+
+    function addExperience() {
+        const title = document.getElementById('new-exp-title').value.trim();
+        const company = document.getElementById('new-exp-company').value.trim();
+        const description = document.getElementById('new-exp-description').value.trim();
+
+        if (!title || !company) {
+            alert('Please fill in job title and company details');
+            return;
+        }
+
+        fetch('/experiences', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                job_title: title,
+                company_details: company,
+                description: description
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error adding experience: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error adding experience');
+        });
+    }
+
+    function editExperience(expId) {
+        const item = document.querySelector(`[data-exp-id="${expId}"]`);
+        item.querySelector('.exp-display').style.display = 'none';
+        item.querySelector('.exp-edit-form').style.display = 'block';
+    }
+
+    function cancelEditExperience(expId) {
+        const item = document.querySelector(`[data-exp-id="${expId}"]`);
+        item.querySelector('.exp-display').style.display = 'block';
+        item.querySelector('.exp-edit-form').style.display = 'none';
+    }
+
+    function saveExperience(expId) {
+        const item = document.querySelector(`[data-exp-id="${expId}"]`);
+        const title = item.querySelector('.edit-exp-title').value.trim();
+        const company = item.querySelector('.edit-exp-company').value.trim();
+        const description = item.querySelector('.edit-exp-description').value.trim();
+
+        if (!title || !company) {
+            alert('Please fill in job title and company details');
+            return;
+        }
+
+        fetch(`/experiences/${expId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                job_title: title,
+                company_details: company,
+                description: description
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating experience: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating experience');
+        });
+    }
+
+    function deleteExperience(expId, jobTitle) {
+        if (!confirm(`Are you sure you want to delete "${jobTitle}"?`)) {
+            return;
+        }
+
+        fetch(`/experiences/${expId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error deleting experience: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting experience');
+        });
+    }
+
+    // ===== EDUCATION FUNCTIONS =====
+    
+    function editEducation(eduId) {
+        const item = document.querySelector(`[data-edu-id="${eduId}"]`);
+        item.querySelector('.edu-display').style.display = 'none';
+        item.querySelector('.edu-edit-form').style.display = 'block';
+    }
+
+    function cancelEditEducation(eduId) {
+        const item = document.querySelector(`[data-edu-id="${eduId}"]`);
+        item.querySelector('.edu-display').style.display = 'block';
+        item.querySelector('.edu-edit-form').style.display = 'none';
+    }
+
+    function saveEducation(eduId) {
+        const item = document.querySelector(`[data-edu-id="${eduId}"]`);
+        const degree = item.querySelector('.edit-edu-degree').value.trim();
+        const details = item.querySelector('.edit-edu-details').value.trim();
+        const description = item.querySelector('.edit-edu-description').value.trim();
+
+        if (!degree || !details) {
+            alert('Please fill in degree and school details');
+            return;
+        }
+
+        fetch(`/education/${eduId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                degree: degree,
+                school_details: details,
+                description: description
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating education: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating education');
+        });
+    }
 </script>
 @endsection

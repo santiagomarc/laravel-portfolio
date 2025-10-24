@@ -11,17 +11,23 @@ use App\Models\Experience;
 use App\Models\Education;
 use App\Models\Project;
 
-class MarcSantiagoDataSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     /**
      * Seed Marc Santiago's actual resume data
      */
     public function run(): void
     {
-        // Get the existing user (admin)
-        $user = User::first();
+        // Create or get the user
+        $user = User::firstOrCreate(
+            ['email' => 'santiagomarcstephen@gmail.com'],
+            [
+                'name' => 'Marc Santiago',
+                'password' => Hash::make('adminpass'),
+            ]
+        );
         
-        // Update user basic info
+        // Update user info
         $user->update([
             'name' => 'Marc Santiago',
             'email' => 'santiagomarcstephen@gmail.com',
@@ -39,13 +45,13 @@ class MarcSantiagoDataSeeder extends Seeder
         Profile::create([
             'user_id' => $user->id,
             'full_name' => 'Marc Santiago',
-            'title' => 'Third Year BS Computer Science Student',
-            'phone' => '+63 9123456789',
+            'title' => '3rd Year BS Computer Science Student',
+            'phone' => '+63 9081209820',
             'location' => 'Calamba, Laguna',
             'website' => null,
             'linkedin' => null,
             'github' => 'https://github.com/santiagomarc',
-            'bio' => 'Third year Computer Science student at Batangas State University with a passion for web development, data science, and software engineering. Experienced in full-stack development using Laravel, PHP, Python, and various modern technologies.',
+            'bio' => '3rd Year Computer Science student at Batangas State University with a passion for web development, data science, and software engineering. Experienced in full-stack development using Laravel, PHP, Python, and various modern technologies.',
         ]);
         
         // Create Skills (from getSkills() method in ResumeController)
@@ -65,7 +71,6 @@ class MarcSantiagoDataSeeder extends Seeder
             // Tools & Technologies
             ['name' => 'Git & GitHub', 'category' => 'Tools & Technologies', 'proficiency_level' => 90],
             ['name' => 'VS Code', 'category' => 'Tools & Technologies', 'proficiency_level' => 95],
-            ['name' => 'Composer', 'category' => 'Tools & Technologies', 'proficiency_level' => 80],
             ['name' => 'XAMPP/PGAdmin', 'category' => 'Tools & Technologies', 'proficiency_level' => 75],
             ['name' => 'Responsive Design', 'category' => 'Tools & Technologies', 'proficiency_level' => 85],
             
@@ -84,20 +89,12 @@ class MarcSantiagoDataSeeder extends Seeder
         $experiencesData = [
             [
                 'job_title' => 'Full Stack Developer',
-                'company' => 'TechCorp Solutions',
-                'location' => 'Remote',
-                'start_date' => '2023-01-01',
-                'end_date' => null,
-                'is_current' => true,
+                'company_details' => 'TechCorp Solutions | Remote | Jan 2023 - Present',
                 'description' => "• Developed responsive web applications using Laravel and React.js\n• Collaborated with cross-functional teams to deliver high-quality software solutions\n• Implemented RESTful APIs and integrated third-party services\n• Optimized database queries resulting in 40% improvement in application performance",
             ],
             [
                 'job_title' => 'Web Development Intern',
-                'company' => 'WebStart Agency',
-                'location' => 'Remote',
-                'start_date' => '2022-06-01',
-                'end_date' => '2022-12-31',
-                'is_current' => false,
+                'company_details' => 'WebStart Agency | Remote | Jun 2022 - Dec 2022',
                 'description' => "• Assisted in building client websites using PHP, HTML, CSS, and JavaScript\n• Learned version control best practices using Git and GitHub\n• Participated in code reviews and agile development processes\n• Contributed to documentation and testing of web applications",
             ],
         ];
@@ -112,7 +109,7 @@ class MarcSantiagoDataSeeder extends Seeder
                 'degree' => 'Bachelor of Science',
                 'field_of_study' => 'Computer Science',
                 'school' => 'Batangas State University',
-                'location' => 'Batangas, Philippines',
+                'location' => 'Batangas',
                 'start_date' => '2023-08-01',
                 'end_date' => '2027-05-30',
                 'is_current' => true,
@@ -122,7 +119,7 @@ class MarcSantiagoDataSeeder extends Seeder
                 'degree' => 'Senior High School',
                 'field_of_study' => 'STEM Track',
                 'school' => 'Philippine Christian University - Dasmarinas',
-                'location' => 'Dasmarinas, Cavite, Philippines',
+                'location' => 'Dasmarinas, Cavite',
                 'start_date' => '2021-08-01',
                 'end_date' => '2023-05-30',
                 'is_current' => false,

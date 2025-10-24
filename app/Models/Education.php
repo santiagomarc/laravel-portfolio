@@ -9,19 +9,8 @@ class Education extends Model
     protected $fillable = [
         'user_id',
         'degree',
-        'field_of_study',
-        'school',
-        'location',
-        'start_date',
-        'end_date',
-        'is_current',
+        'school_details',
         'description',
-    ];
-
-    protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'is_current' => 'boolean',
     ];
 
     public function user()

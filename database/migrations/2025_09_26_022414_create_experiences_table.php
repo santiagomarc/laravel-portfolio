@@ -15,11 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('job_title');
-            $table->string('company');
-            $table->string('location')->nullable();
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->boolean('is_current')->default(false);
+            $table->string('company_details', 500); // Combined: company | location | period
             $table->text('description')->nullable();
             $table->timestamps();
         });

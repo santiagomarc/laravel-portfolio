@@ -25,6 +25,19 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [ResumeController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile/edit', [ResumeController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ResumeController::class, 'update'])->name('profile.update');
+    
+    // Skill CRUD routes
+    Route::post('/skills', [ResumeController::class, 'storeSkill'])->name('skills.store');
+    Route::put('/skills/{id}', [ResumeController::class, 'updateSkill'])->name('skills.update');
+    Route::delete('/skills/{id}', [ResumeController::class, 'deleteSkill'])->name('skills.delete');
+    
+    // Experience CRUD routes
+    Route::post('/experiences', [ResumeController::class, 'storeExperience'])->name('experiences.store');
+    Route::put('/experiences/{id}', [ResumeController::class, 'updateExperience'])->name('experiences.update');
+    Route::delete('/experiences/{id}', [ResumeController::class, 'deleteExperience'])->name('experiences.delete');
+    
+    // Education CRUD routes (only update - no add/delete)
+    Route::put('/education/{id}', [ResumeController::class, 'updateEducation'])->name('education.update');
 });
 
 Route::get('/resume/{id}', [ResumeController::class, 'show'])->name('resume.public');

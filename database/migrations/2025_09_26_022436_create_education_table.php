@@ -14,14 +14,9 @@ return new class extends Migration
         Schema::create('education', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('degree');
-            $table->string('field_of_study');
-            $table->string('school');
-            $table->string('location')->nullable();
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->boolean('is_current')->default(false);
-            $table->text('description')->nullable();
+            $table->string('degree'); // e.g., "Bachelor of Science in Computer Science"
+            $table->string('school_details', 500); // e.g., "Batangas State University | Batangas | 2023 - Present"
+            $table->text('description')->nullable(); // e.g., "Relevant Coursework: ..."
             $table->timestamps();
         });
     }

@@ -223,8 +223,8 @@ class ResumeController extends Controller
             'full_name' => $user->name,
         ]);
         
-        $experiences = $user->experiences()->orderBy('start_date', 'desc')->get();
-        $education = $user->education()->orderBy('start_date', 'desc')->get();
+        $experiences = $user->experiences()->get();
+        $education = $user->education()->get();
         $projects = $user->projects()->orderBy('start_date', 'desc')->get();
         $skills = $user->skills()->get();
         
@@ -246,8 +246,8 @@ class ResumeController extends Controller
             'full_name' => $user->name,
         ]);
         
-        $experiences = $user->experiences()->orderBy('start_date', 'desc')->get();
-        $education = $user->education()->orderBy('start_date', 'desc')->get();
+        $experiences = $user->experiences()->get();
+        $education = $user->education()->get();
         $projects = $user->projects()->orderBy('start_date', 'desc')->get();
         $skills = $user->skills()->get();
         
@@ -299,11 +299,227 @@ class ResumeController extends Controller
             'full_name' => $user->name,
         ]);
         
-        $experiences = $user->experiences()->orderBy('start_date', 'desc')->get();
-        $education = $user->education()->orderBy('start_date', 'desc')->get();
+        $experiences = $user->experiences()->get();
+        $education = $user->education()->get();
         $projects = $user->projects()->orderBy('start_date', 'desc')->get();
         $skills = $user->skills()->get();
         
         return view('resume.public', compact('user', 'profile', 'experiences', 'education', 'projects', 'skills'));
+    }
+
+    // ===== SKILL CRUD METHODS =====
+
+    /**
+     * Store a new skill
+     * Route: POST /skills
+     */
+    public function storeSkill(Request $request)
+    {
+        $user = User::first(); // Get logged-in user
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'proficiency_level' => 'required|integer|min:0|max:100',
+        ]);
+
+        $skill = Skill::create([
+            'user_id' => $user->id,
+            'name' => $validated['name'],
+            'category' => $validated['category'],
+            'proficiency_level' => $validated['proficiency_level'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Skill added successfully',
+            'skill' => $skill
+        ]);
+    }
+
+    /**
+     * Update an existing skill
+     * Route: PUT /skills/{id}
+     */
+    public function updateSkill($id, Request $request)
+    {
+        $skill = Skill::findOrFail($id);
+        
+        // Make sure skill belongs to current user
+        $user = User::first();
+        if ($skill->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'proficiency_level' => 'required|integer|min:0|max:100',
+        ]);
+
+        $skill->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Skill updated successfully',
+            'skill' => $skill
+        ]);
+    }
+
+    /**
+     * Delete a skill
+     * Route: DELETE /skills/{id}
+     */
+    public function deleteSkill($id)
+    {
+        $skill = Skill::findOrFail($id);
+        
+        // Make sure skill belongs to current user
+        $user = User::first();
+        if ($skill->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $skill->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Skill deleted successfully'
+        ]);
+    }
+
+    
+    // ===== EXPERIENCE CRUD METHODS =====
+
+    /**
+     * Store a new work experience
+     * Route: POST /experiences
+     */
+    public function storeExperience(Request $request)
+    {
+        $user = User::first(); // Get logged-in user
+        
+        $validated = $request->validate([
+            'job_title' => 'required|string|max:255',
+            'company_details' => 'required|string|max:500',
+            'description' => 'nullable|string|max:2000',
+        ]);
+
+        $experience = Experience::create([
+            'user_id' => $user->id,
+            'job_title' => $validated['job_title'],
+            'company_details' => $validated['company_details'],
+            'description' => $validated['description'] ?? '',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Experience added successfully',
+            'experience' => $experience
+        ]);
+    }
+
+    /**
+     * Update an existing work experience
+     * Route: PUT /experiences/{id}
+     */
+    public function updateExperience($id, Request $request)
+    {
+        $experience = Experience::findOrFail($id);
+        
+        // Make sure experience belongs to current user
+        $user = User::first();
+        if ($experience->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'job_title' => 'required|string|max:255',
+            'company_details' => 'required|string|max:500',
+            'description' => 'nullable|string|max:2000',
+        ]);
+
+        $experience->update([
+            'job_title' => $validated['job_title'],
+            'company_details' => $validated['company_details'],
+            'description' => $validated['description'] ?? '',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Experience updated successfully',
+            'experience' => $experience
+        ]);
+    }
+
+        /**
+     * Delete a work experience
+     * Route: DELETE /experiences/{id}
+     */
+    public function deleteExperience($id)
+    {
+        $experience = Experience::findOrFail($id);
+        
+        // Make sure experience belongs to current user
+        $user = User::first();
+        if ($experience->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $experience->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Experience deleted successfully'
+        ]);
+    }
+
+    // ===== EDUCATION CRUD METHODS =====
+
+    /**
+     * Update education entry
+     * Route: PUT /education/{id}
+     */
+    public function updateEducation(Request $request, $id)
+    {
+        $education = Education::findOrFail($id);
+        
+        // Make sure education belongs to current user
+        $user = User::first();
+        if ($education->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'degree' => 'required|string|max:255',
+            'school_details' => 'required|string|max:500',
+            'description' => 'nullable|string',
+        ]);
+
+        $education->update([
+            'degree' => $validated['degree'],
+            'school_details' => $validated['school_details'],
+            'description' => $validated['description'] ?? '',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Education updated successfully',
+            'education' => $education
+        ]);
     }
 }

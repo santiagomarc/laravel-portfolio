@@ -3,13 +3,8 @@
     <h2>Education</h2>
     @forelse($education as $edu)
     <div class="education-item">
-        <h3>{{ $edu->degree }} in {{ $edu->field_of_study }}</h3>
-        <p class="school-date">
-            <strong>{{ $edu->school }}</strong> 
-            @if($edu->location) | {{ $edu->location }} @endif | 
-            {{ $edu->start_date->format('Y') }} - 
-            {{ $edu->is_current ? 'Present' : $edu->end_date->format('Y') }}
-        </p>
+        <h3>{{ $edu->degree }}</h3>
+        <p class="school-date">{{ $edu->school_details }}</p>
         @if($edu->description)
         <p>{{ $edu->description }}</p>
         @endif
