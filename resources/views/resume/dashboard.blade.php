@@ -5,45 +5,10 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/resume-style.css') }}">
-<style>
-    .dashboard-actions {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
-    .btn-edit {
-        background: rgba(44, 62, 80, 0.95);
-        backdrop-filter: blur(10px);
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        font-size: 0.9em;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-    }
-    .btn-edit:hover {
-        background: var(--accent);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-    }
-</style>
 @endsection
 
 @section('content')
 <div class="container">
-    <div class="dashboard-actions">
-        <a href="{{ route('profile.edit') }}" class="btn-edit">
-            📝 Edit Resume
-        </a>
-    </div>
-
     <!-- Floating Navigation -->
     <nav class="floating-nav" id="floatingNav">
         <ul>
@@ -61,6 +26,7 @@
                     </button>
                 </form>
             </li>
+            <li><a href="{{ route('profile.edit') }}" class="nav-link">📝</a></li>
             <li><button id="themeToggle" class="theme-toggle" title="Toggle Dark/Light Mode">🌙</button></li>
         </ul>
     </nav>

@@ -21,7 +21,6 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/contact', [ResumeController::class, 'contact'])->name('contact');
     Route::post('/contact', [ResumeController::class, 'sendMessage'])->name('contact.send');
     
-    // NEW routes for Activity 3
     Route::get('/dashboard', [ResumeController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile/edit', [ResumeController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ResumeController::class, 'update'])->name('profile.update');
@@ -41,9 +40,3 @@ Route::middleware('auth.custom')->group(function () {
 });
 
 Route::get('/resume/{id}', [ResumeController::class, 'show'])->name('resume.public');
-
-// alternative link public_resume.php?id=1
-Route::get('/public_resume', function (Request $request) {
-    $id = $request->query('id', 1); 
-    return app(ResumeController::class)->show($id);
-})->name('resume.public.query');

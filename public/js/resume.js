@@ -8,19 +8,19 @@ const closeBtn = document.querySelector('.close');
 const projectDetails = {
     1: {
         title: 'Laravel Portfolio with Authentication',
-        images: ['images/p1.png'],
+        images: ['/images/p1.png'],
         description: 'A professional portfolio website built with Laravel framework featuring user authentication, responsive design, and dynamic content management.',
         technologies: 'Laravel, PHP, PostgreSQL, Blade, CSS3'
     },
     2: {
         title: 'Enhanced K-Means Clustering Algorithm',
-        images: ['images/p2.png', 'images/p21.png'],
+        images: ['/images/p2.png', '/images/p21.png'],
         description: 'Research project implementing a distance-based soft weighting mechanism for noise-handling in K-Means algorithm using Gaussian RBF weighted influence.',
         technologies: 'Python, NumPy, Scikit-learn, Matplotlib'
     },
     3: {
         title: 'Nutrition-Based Food Ordering System',
-        images: ['images/p3.png', 'images/p31.png'],
+        images: ['/images/p3.png', '/images/p31.png'],
         description: 'Console application with GUI built using Java and MySQL, featuring nutritional information tracking and user-friendly ordering interface.',
         technologies: 'Java, MySQL, Swing, JDBC'
     }
@@ -34,16 +34,12 @@ projectLinks.forEach(link => {
         const project = projectDetails[id];
         
         if (project) {
-            // Build modal content with images
             let modalContent = `<h3>${project.title}</h3>`;
-            
-            // Add images if available
             if (project.images && project.images.length > 0) {
                 project.images.forEach(img => {
                     modalContent += `<img src="${img}" alt="${project.title}" class="modal-image">`;
                 });
-            }
-            
+            }            
             modalContent += `<p>${project.description}</p>`;
             modalContent += `<p><strong>Technologies:</strong> ${project.technologies}</p>`;
             
@@ -73,17 +69,12 @@ const floatingNav = document.getElementById('floatingNav');
 const navLinks = document.querySelectorAll('.nav-link');
 
 window.addEventListener('scroll', function() {
-    // Show/hide floating nav
     if (window.scrollY > 300) {
         floatingNav.classList.add('visible');
     } else {
         floatingNav.classList.remove('visible');
     }
-    
-    // Update active nav link
     updateActiveNavLink();
-    
-    // Animate skill bars
     animateSkillBars();
 });
 
@@ -142,7 +133,6 @@ function initThemeToggle() {
     });
 }
 
-// Animate skill bars when they come into view
 function animateSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress');
     
@@ -158,7 +148,6 @@ function animateSkillBars() {
     });
 }
 
-// Intersection Observer for skill bars (more efficient)
 const observerOptions = {
     threshold: 0.5,
     rootMargin: '0px 0px -100px 0px'
@@ -176,7 +165,6 @@ const observer = new IntersectionObserver(function(entries) {
     });
 }, observerOptions);
 
-// Contact form AJAX submission
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
@@ -187,7 +175,7 @@ function initContactForm() {
             const formData = new FormData(form);
             const responseDiv = document.getElementById('form-response');
             
-            // Get CSRF token
+            // CSRF token
             const csrfToken = document.querySelector('meta[name="csrf-token"]');
             
             fetch(form.action, {
@@ -215,20 +203,13 @@ function initContactForm() {
     }
 }
 
-// Initialize everything when DOM is loaded
+// init everything
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize theme toggle
     initThemeToggle();
-    
-    // Initialize contact form
     initContactForm();
-    
-    // Set up skill bars observer
     const skillsSection = document.getElementById('skills');
     if (skillsSection) {
         observer.observe(skillsSection);
     }
-    
-    // Trigger skill bar animation on load if skills section is visible
     animateSkillBars();
 });

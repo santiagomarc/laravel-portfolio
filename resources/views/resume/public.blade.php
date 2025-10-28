@@ -28,7 +28,6 @@
 
 @section('content')
 <div class="container public-view">
-    <!-- Public View Badge -->
     <div class="public-badge">
         🌐 Public Resume
     </div>
@@ -45,17 +44,13 @@
         </ul>
     </nav>
 
-    <!-- Same Resume Sections (using partials) -->
     @include('resume.partials._header')
     @include('resume.partials._summary')
     @include('resume.partials._experience')
     @include('resume.partials._education')
     @include('resume.partials._skills')
     @include('resume.partials._projects')
-    
-    <!-- NO contact form in public view -->
 
-    <!-- Footer -->
     <footer>
         <p>© {{ date('Y') }} {{ $profile->full_name }}</p>
         <p><small>Public Resume View</small></p>
