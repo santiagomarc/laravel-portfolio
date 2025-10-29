@@ -36,9 +36,8 @@
         </form>
     </div>
 
-    {{-- Add JavaScript for form validation --}}
+    {{-- form validation --}}
     <script>
-        // Form validation
         document.querySelector('form').addEventListener('submit', function(e) {
             const email = document.querySelector('input[name="email"]').value.trim();
             const password = document.querySelector('input[name="password"]').value.trim();
@@ -55,8 +54,6 @@
                 return;
             }
         });
-
-        // Auto-focus on email field
         document.querySelector('input[name="email"]').focus();
     </script>
 </body>

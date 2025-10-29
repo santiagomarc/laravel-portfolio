@@ -1,30 +1,30 @@
-# Laravel Portfolio with Authentication 🚀
+# Laravel Resume Portfolio with Auth and CRUD Management 🚀
 
-A professional portfolio website built with Laravel featuring user authentication, responsive design, and dynamic content management.
+An enhanced professional portfolio website built with Laravel featuring user authentication, PostgreSQL integration, complete CRUD operations, and dynamic content management. This is Activity 3 - an advanced version with database-driven resume editing capabilities.
 
 ## ✨ Features
 
-- **🔐 Authentication System** - Secure login/logout with session management
-- **📱 Responsive Design** - Works perfectly on desktop and mobile
-- **🌙 Dark/Light Theme** - Toggle between themes with CSS variables
-- **📋 Floating Navigation** - Smooth scrolling navigation that appears on scroll
-- **🎨 Interactive Elements** - Animated skill bars, project modals, contact form
-- **⚡ Performance Optimized** - Clean code structure following Laravel best practices
+- **🔐  Authentication System** - Email-based login with PostgreSQL integration and custom middleware
+- **📝  CRUD Operations** - Add, edit, delete skills, experiences, and education inline
+- **⚡ AJAX-Powered Interface** - Seamless editing without page refreshes
+- **🌐 Public/Private Access** - Dashboard for editing, public view for sharing
+- **📱 Responsive Design** - Works perfectly on desktop and mobile devices
+- **🌙 Dark/Light Theme Toggle** - Persistent theme switching with localStorage
+- **📋 Floating Navigation** - Context-aware navigation with smooth scrolling
+- **🧩 Modular Architecture** - Blade partials for maintainable code structure
+- **🛡️ Security Features** - CSRF protection, input validation, password hashing
+- **🎨 Interactive Elements** - Animated skill bars, project modals, inline editing forms
 
 ## 🛠️ Tech Stack
 
-- **Backend:** PHP, Laravel Framework
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
-- **Database:** SQLite (configured for easy setup)
-- **Styling:** CSS Variables, Flexbox, Grid
-- **Authentication:** Laravel Sessions
+- **Backend:** PHP , Laravel Framework
+- **Database:** PostgreSQL with Eloquent ORM
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript with AJAX
+- **Templating:** Blade Engine with partial components
+- **Authentication:** Custom middleware with session management
+- **Security:** bcrypt hashing, CSRF tokens, input validation
 
 ## 🚀 Quick Start
-
-### Prerequisites
-- PHP 8.1+
-- Composer
-- Git
 
 ### Installation
 
@@ -54,12 +54,9 @@ A professional portfolio website built with Laravel featuring user authenticatio
 
 ## 🔑 Demo Credentials
 
-- **Username:** `admin`
-- **Password:** `1234`
+- **Email:** `xxx@gmail.com`
+- **Password:** `adminpass`
 
-## 📸 Screenshots
-
-*Add screenshots of your portfolio here*
 
 ## 🎯 Project Structure
 
@@ -75,14 +72,9 @@ A professional portfolio website built with Laravel featuring user authenticatio
 ## 🌟 Key Highlights
 
 - **Clean Architecture** - Follows Laravel MVC pattern
-- **Security First** - Proper authentication and session handling
+- **Security** - Proper authentication and session handling
 - **Modern CSS** - CSS Variables for theming, Flexbox/Grid layouts
 - **Vanilla JavaScript** - No dependencies, pure performance
-- **Mobile Responsive** - Looks great on all devices
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 

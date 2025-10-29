@@ -29,7 +29,7 @@
 @section('content')
 <div class="container public-view">
     <div class="public-badge">
-        🌐 Public Resume
+        Public View
     </div>
 
     <!-- Simple Navigation (no logout) -->

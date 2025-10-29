@@ -19,11 +19,9 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        // If already logged in, redirect to dashboard
         if (Session::get('logged_in')) {
             return redirect()->route('dashboard');
-        }
-        
+        }        
         return view('auth.login');
     }
 
@@ -33,7 +31,6 @@ class AuthController extends Controller
      */
     public function authenticate(Request $request)
     {
-        // Validate input
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
@@ -41,13 +38,10 @@ class AuthController extends Controller
 
         $email = trim($request->email);
         $password = trim($request->password);
-
-        // Check database for user by email
+        // looks up user in database
         $user = User::where('email', $email)->first();
-
-        // Verify user exists and password matches
         if ($user && Hash::check($password, $user->password)) {
-            // Set session with user data
+            // session management
             Session::put('logged_in', true);
             Session::put('user_id', $user->id);
             Session::put('username', $user->name);

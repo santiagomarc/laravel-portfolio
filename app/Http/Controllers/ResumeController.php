@@ -237,10 +237,8 @@ class ResumeController extends Controller
      */
     public function edit()
     {
-        // Get the logged-in user from database
         $user = User::first();
         
-        // Get or create profile if it doesn't exist
         $profile = $user->profile ?? Profile::create([
             'user_id' => $user->id,
             'full_name' => $user->name,
@@ -292,8 +290,6 @@ class ResumeController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        
-        // Get profile or create a basic one
         $profile = $user->profile ?? Profile::create([
             'user_id' => $user->id,
             'full_name' => $user->name,
@@ -315,7 +311,7 @@ class ResumeController extends Controller
      */
     public function storeSkill(Request $request)
     {
-        $user = User::first(); // Get logged-in user
+        $user = User::first(); 
         
         $validated = $request->validate([
             'name' => 'required|string|max:255',

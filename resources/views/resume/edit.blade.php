@@ -485,8 +485,7 @@
         item.querySelector('.skill-actions').style.display = 'block';
         item.querySelector('.skill-edit-form').style.display = 'none';
     }
-
-    // Save skill
+    
     function saveSkill(skillId) {
         const item = document.querySelector(`[data-skill-id="${skillId}"]`);
         const name = item.querySelector('.edit-skill-name').value.trim();
@@ -496,8 +495,6 @@
             alert('Please enter a skill name');
             return;
         }
-
-        // Send AJAX request to update skill
         fetch(`/skills/${skillId}`, {
             method: 'PUT',
             headers: {
@@ -512,7 +509,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload(); // Reload to show updated skill
+                location.reload(); 
             } else {
                 alert('Error updating skill: ' + (data.message || 'Unknown error'));
             }
@@ -523,13 +520,10 @@
         });
     }
 
-    // Delete skill
     function deleteSkill(skillId, skillName) {
         if (!confirm(`Are you sure you want to delete "${skillName}"?`)) {
             return;
         }
-
-        // Send AJAX request to delete skill
         fetch(`/skills/${skillId}`, {
             method: 'DELETE',
             headers: {
@@ -540,7 +534,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload(); // Reload to remove deleted skill
+                location.reload(); 
             } else {
                 alert('Error deleting skill: ' + (data.message || 'Unknown error'));
             }
@@ -551,7 +545,6 @@
         });
     }
 
-    // Confirm before leaving if form has changes
     let formChanged = false;
     document.querySelectorAll('input, textarea').forEach(element => {
         element.addEventListener('change', function() {
@@ -566,7 +559,6 @@
         }
     });
 
-    // Clear flag when form is submitted
     document.querySelector('form').addEventListener('submit', function() {
         formChanged = false;
     });

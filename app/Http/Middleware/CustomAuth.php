@@ -19,15 +19,11 @@ class CustomAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if user is logged in via session
         if (!Session::get('logged_in')) {
-            // User is not authenticated, redirect to login with message
             return redirect()->route('login')->withErrors([
                 'access' => 'Please log in to access this page.'
             ]);
         }
-
-        // User is authenticated, allow access
         return $next($request);
     }
 }
